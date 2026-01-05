@@ -1,0 +1,4 @@
+directory	T:\dac_user\2025\IDD_2025-1\TestMEDM\test2
+file	log_2025_01_24.txt
+pv_file	log_2025_01_24_motors.txt
+detectors	Eiger2 9M 3S,lightfield,us_visual,ds_visual,ms_visual

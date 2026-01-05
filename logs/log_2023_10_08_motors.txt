@@ -1,0 +1,8 @@
+lasers_shutter,13IDD:LaserShutter,0
+Horiz_stage,13IDD:m81.RBV,1
+Vert_stage,13IDD:m83.RBV,1
+focus,13IDD:m82.RBV,1
+laser_power_ds,13IDD:Laser2OutputPower,0
+laser_percent_ds,13IDD:DS_LaserPower.VAL,0
+laser_power_us,13IDD:Laser1OutputPower,0
+laser_percent_us,13IDD:US_LaserPower.VAL,0

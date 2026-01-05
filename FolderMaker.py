@@ -106,7 +106,14 @@ class FolderMaker(QtWidgets.QWidget):
             year=self.advanced_settings_gb.year_edit.text(),
             cycle=self.advanced_settings_gb.cycle_edit.text()
         )
-        self.base_dir = os.path.join(root_dir, self.main_dir_edit.text().replace('/', '\\'), self.sample_dir_edit.text().replace('/', '\\'))
+
+        # TODO: Added validator for sample input. Chris
+        validated_group = self.main_dir_edit.text().replace('/', '\\').strip()
+        validated_sample = self.sample_dir_edit.text().replace('/', '\\').strip()
+        validated_group = validated_group.replace(" ", "_")
+        validated_sample = validated_sample.replace(" ", "_")
+
+        self.base_dir = os.path.join(root_dir, validated_group, validated_sample)
         self.full_path_label.setText(self.base_dir)
 
         for detector in self.chosen_detectors:
@@ -170,10 +177,22 @@ class FolderMaker(QtWidgets.QWidget):
                 path, file = os.path.split(full_path)
                 file = file.rsplit('_', 1)[0]
             else:
-                main_dir = str(self.main_dir_edit.text().replace('/', '\\') + '\\' + self.sample_dir_edit.text().replace('/', '\\'))
-                rel_dir = str(self.chosen_detectors[detector].rel_dir_edit.text().replace('/', '\\'))
+
+                # Changed by Chris to account for empty spaces.
+                main_dir_validated = self.main_dir_edit.text().replace('/', '\\').strip()
+                sample_dir_validated = self.sample_dir_edit.text().replace('/', '\\').strip()
+                rel_dir_validated = self.chosen_detectors[detector].rel_dir_edit.text().replace('/', '\\').strip()
+                base_name_validated = self.chosen_detectors[detector].base_name_edit.text().replace('/', '\\').strip()
+
+                main_dir_validated = main_dir_validated.replace(" ", "_")
+                sample_dir_validated = sample_dir_validated.replace(" ", "_")
+                rel_dir_validated = rel_dir_validated.replace(" ", "_")
+                base_name_validated = base_name_validated.replace(" ", "_")
+
+                main_dir = str(main_dir_validated + '\\' + sample_dir_validated)
+                rel_dir = str(rel_dir_validated)
                 path = (soft_link + main_dir + '\\' + rel_dir).replace('\\', '/')
-                file = str(self.chosen_detectors[detector].base_name_edit.text().replace('/', '\\'))
+                file = str(base_name_validated)
             number = str(self.chosen_detectors[detector].num_edit.text())
 
             caput(detectors[detector]['file_path'], path)
@@ -333,9 +352,16 @@ class DetectorSection(QtWidgets.QGroupBox):
     def value_changed(self):
         # if not self.sender() == self.rel_dir_edit and str(self.base_name_edit.text()) == 'LaB6':
         #     self.rel_dir_edit.setText('LaB6')
-        current_dir = os.path.join(self.base_dir, str(self.rel_dir_edit.text().replace('/', '\\')))
+
+        # TODO: Added validator for sample input. Chris - Detector
+        validated_sub = self.rel_dir_edit.text().replace('/', '\\').strip()
+        validated_filename = self.base_name_edit.text().strip()
+        validated_sub = validated_sub.replace(" ", "_")
+        validated_filename = validated_filename.replace(" ", "_")
+
+        current_dir = os.path.join(self.base_dir, validated_sub)
         if not self.sender() == self.num_edit:
-            next_num = self.find_next_number(str(current_dir + '\\' + self.base_name_edit.text() + '_'),
+            next_num = self.find_next_number(str(current_dir + '\\' + validated_filename + '_'),
                                              detectors[self.detector]['file_type'])
             self.num_edit.setText(str(next_num))
         self.update_path()
@@ -352,9 +378,16 @@ class DetectorSection(QtWidgets.QGroupBox):
         return int(fmax)+1
 
     def update_path(self):
-        self.full_path = os.path.join(self.base_dir, str(self.rel_dir_edit.text().replace('/', '\\')),
-                                      str(self.base_name_edit.text().replace('/', '\\')) + '_'
-                                      + str(self.num_edit.text()).zfill(3))
+        # TODO: Added validator for sample input. Chris - Detector
+        validated_sub = self.rel_dir_edit.text().replace('/', '\\').strip()
+        validated_filename = self.base_name_edit.text().replace('/', '\\').strip()
+        validate_file_num = self.num_edit.text().strip()
+        validated_sub = validated_sub.replace(" ", "_")
+        validated_filename = validated_filename.replace(" ", "_")
+        validate_file_num = validate_file_num.replace(" ", "_")
+
+        self.full_path = os.path.join(self.base_dir, validated_sub, validated_filename + '_'
+                                      + str(validate_file_num).zfill(3))
 
         self.full_path_label.setText(self.full_path)
         if os.path.isdir(self.full_path.rsplit('\\', 1)[0]):

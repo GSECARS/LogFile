@@ -319,10 +319,10 @@ class LogWindow(QtWidgets.QWidget):
 
     def load_pv_list(self, file_name=None):
         if not file_name or not os.path.isfile(file_name):
-            load_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file name for loading pv list', '.',
+            load_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file name for loading pv list', 'C:/Repos/LogFile/logs',
                                                                  'Text Files (*.txt)')
         else:
-            load_name = file_name
+            load_name = 'C:/Repos/LogFile/logs/' + file_name
 
         if not load_name:
             msg = 'No File Opened'
@@ -351,10 +351,10 @@ class LogWindow(QtWidgets.QWidget):
 
     def save_pv_list(self, file_name=None):
         if not file_name:
-            save_name, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Choose file name for saving pv list', '.',
+            save_name, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Choose file name for saving pv list', 'C:/Repos/LogFile/logs',
                                                                  'Text Files (*.txt)')
         else:
-            save_name = file_name
+            save_name = 'C:/Repos/LogFile/logs/' + file_name
 
         if not save_name:
             msg = 'No File Saved'
@@ -597,7 +597,7 @@ class LogWindow(QtWidgets.QWidget):
     def load_config(self):
         cfg = {}
         try:
-            cfg_file = open('log_config.txt', 'r')
+            cfg_file = open("C:/Repos/LogFile/log_config.txt", 'r')
         except IOError:
             print('No configuration file, using program defaults')
             return
@@ -617,7 +617,7 @@ class LogWindow(QtWidgets.QWidget):
                 detector.setChecked(True)
 
     def save_config(self):
-        cfg_file = open('log_config.txt', 'w')
+        cfg_file = open("C:/Repos/LogFile/log_config.txt", 'w')
 
         outline = 'directory\t' + self.choose_dir + '\n'
         cfg_file.write(outline)

@@ -63,7 +63,8 @@ class StartMonitors(QWidget):
     def signal_received(self, sig_name):
         t0 = time.time()
         detector, phase = sig_name.rsplit('_', 1)
-        frame_type_PV = detectors[detector]['frame_type_PV']
+        self.pv_ = detectors[detector]['frame_type_PV']
+        frame_type_PV = self.pv_
 
         if frame_type_PV is not None:
             frame_type = caget(frame_type_PV, as_string=False)
@@ -180,6 +181,7 @@ class StartMonitors(QWidget):
         for pv in self.parent.widget.pv_short_name_list.selectedItems():
             if self.parent.pv_dict[str(pv.text())]['after']:
                 m_value = caget(self.parent.pv_dict[str(pv.text())]['PV'])
+                print(m_value)
                 if type(m_value) is not str:
                     if abs(m_value) < 1:
                         m_value = '{:.3g}'.format(m_value)

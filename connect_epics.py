@@ -90,37 +90,3 @@ epics_prepare = {
     'Image_ms_Number': '13IDD_PG3:TIFF1:FileNumber',
     'Image_ms_Final_Name': '13IDD_PG3:TIFF1:FullFileName_RBV',
 }
-
-# Obsolete
-"""
-epics_config = {
-    'T_ds': '13IDD:ds_las_temp.VAL',
-    'T_int_ds': '13IDD:dn_t_int',
-    'T_us': '13IDD:us_las_temp.VAL',
-    'T_int_us': '13IDD:up_t_int',
-    'laser_power_ds': '13IDD:Laser2OutputPower',
-    'laser_percent_ds': '13IDD:DAC2_4.VAL',
-    'laser_power_us': '13IDD:Laser1OutputPower',
-    'laser_percent_us': '13IDD:DAC2_3.VAL',
-    'DAC_hor': '13IDD:m81.RBV',
-    'DAC_ver': '13IDD:m83.RBV',
-    'DAC_focus': '13IDD:m82.RBV',
-    'DAC_omega': '13IDD:m96.LVIO',
-    'DET_pos_z': '13IDD:m84.RBV',
-    'DET_pos_x': '13IDD:m8.RBV',
-    'XRD_shutter': '13IDD:Unidig1Bi11.VAL',
-    'lasers_shutter': '13IDD:Unidig2Bi4.VAL',
-    'lasers_filter': '13IDD:Unidig1Bi4.VAL',
-    'xray_energy': '13IDA:CDEn:E_RBV',
-    'APS_current': 'S:SRcurrentAI.VAL',
-    'T_Hutch': 'G:AHU:FP5088Ai.VAL',
-    'delay': '13IDD:BNC1:P3:Delay',
-    'T1': '13Keithley2:DMM1Ch1_calc.VAL',
-    'T2': '13Keithley2:DMM1Ch2_calc.VAL',
-    'T3': '13Keithley2:DMM1Ch3_calc.VAL',
-    'T4': '13Keithley2:DMM1Ch4_calc.VAL',
-    'Soller_x': '13IDD:m93.RBV',
-    'Soller_z': '13IDD:m94.RBV',
-    'Soller_th': '13IDD:m95.RBV',
-}
-"""
