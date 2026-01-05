@@ -143,7 +143,19 @@ class StartMonitors(QWidget):
             else:
                 comment_index = caget(pv, as_string=False)
                 comment_values.append(val[comment_index])
-        return detectors[detector]['comments'].format(*comment_values)
+        # Check if format string matches number of values
+        format_string = detectors[detector]['comments']
+        try:
+            return format_string.format(*comment_values)
+        except IndexError as e:
+            # Provide a more helpful error message
+            import re
+            num_placeholders = len(re.findall(r'\{(\d+)\}', format_string))
+            raise IndexError(
+                f"Format string mismatch for detector '{detector}': "
+                f"format string has {num_placeholders} placeholders but only {len(comment_values)} values provided. "
+                f"Format: '{format_string}', Values: {comment_values}"
+            ) from e
 
     def output_line_common_start(self, start_time, exp_time):
         # t0 = time.time()

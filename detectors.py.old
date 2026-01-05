@@ -146,7 +146,7 @@ detectors['ms_visual'] = {
     'new_file_name': {0: '13BMDPG3:TIFF1:FullFileName_RBV',
                       },
     'comments': 'Gain: {0}, Zoom: {1}',
-    'comments_PVs': ['13BMDPG3:cam1:GainValAbs', '13BMD:m71.RBV'],
+    'comments_PVs': ['13BMD:m71.RBV'],
     'comments_values': [None, None],
     'sleep_after_end': 0.0,
     'default_base_name': 'ms_image',
