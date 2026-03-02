@@ -10,6 +10,7 @@ except ImportError:
 from qtpy import QtGui, QtCore, QtWidgets
 from detectors import detectors
 import collections
+from contextlib import suppress
 
 ADVANCED_PASSWORD = "Daagbf"
 
@@ -372,9 +373,10 @@ class DetectorSection(QtWidgets.QGroupBox):
         fmax = 0
         for file in file_list:
             if file.rsplit('.', 1)[1] == file_type:
-                fnum = int(file.rsplit('.', 1)[0].rsplit('_', 1)[-1])
-                if fnum > fmax:
-                    fmax = fnum
+                with suppress(Exception):
+                    fnum = int(file.rsplit('.', 1)[0].rsplit('_', 1)[-1])
+                    if fnum > fmax:
+                        fmax = fnum
         return int(fmax)+1
 
     def update_path(self):
