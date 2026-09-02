@@ -35,6 +35,7 @@ class LogFileWidget(QtWidgets.QWidget):
         self.pv_move_dn_btn = QtWidgets.QPushButton(u'\u2193')
         self.pv_toggle_after_btn = QtWidgets.QPushButton('Before/After')
         self.clear_detectors_stack_btn = QtWidgets.QPushButton('Clear detectors')
+        self.set_logs_dir_btn = QtWidgets.QPushButton('Set Logs Dir')
 
         self.log_entries_list = QtWidgets.QListWidget(self)
         self.log_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
@@ -117,6 +118,7 @@ class LogFileWidget(QtWidgets.QWidget):
         self.grid_list_buttons.addWidget(self.pv_rename_btn, 2, 2, 1, 1)
         self.grid_list_buttons.addWidget(self.pv_toggle_after_btn, 1, 0, 1, 1)
         self.grid_list_buttons.addWidget(self.clear_detectors_stack_btn, 3, 2, 1, 1)
+        self.grid_list_buttons.addWidget(self.set_logs_dir_btn, 3, 0, 1, 2)
         self.hbox_lists.addLayout(self.grid_list_buttons)
 
         self.log_splitter.addWidget(self.log_entries_list)

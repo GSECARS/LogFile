@@ -73,6 +73,7 @@ class LogWindow(QtWidgets.QWidget):
         self.choose_file = DEF_FILE
         self.pvs_file = ''
         self.folder_maker_settings = {}
+        self.logs_dir = self.log_file_settings.value('logs_dir', defaultValue='C:/Repos/LogFile/logs')
 
         # self.detector = 1
         self.widget = LogFileWidget(self)
@@ -95,6 +96,7 @@ class LogWindow(QtWidgets.QWidget):
         self.widget.stop_btn.clicked.connect(self.stop_logging)
         self.widget.pv_load_btn.clicked.connect(self.load_pv_list)
         self.widget.pv_save_btn.clicked.connect(self.save_pv_list)
+        self.widget.set_logs_dir_btn.clicked.connect(self.set_logs_dir)
         self.widget.pv_remove_btn.clicked.connect(self.remove_from_pv_list)
         self.widget.pv_add_btn.clicked.connect(self.add_to_pv_list)
         self.widget.pv_clear_btn.clicked.connect(self.clear_pv_list)
@@ -141,6 +143,12 @@ class LogWindow(QtWidgets.QWidget):
         self.choose_dir = QtWidgets.QFileDialog.getExistingDirectory(self, msg, self.choose_dir)
         if self.choose_dir:
             self.set_choose_dir_label()
+
+    def set_logs_dir(self):
+        directory = QtWidgets.QFileDialog.getExistingDirectory(self, 'Set Logs Directory', self.logs_dir)
+        if directory:
+            self.logs_dir = directory
+            self.log_file_settings.setValue('logs_dir', self.logs_dir)
 
     def set_choose_dir_label(self):
         self.widget.full_path_lbl.setText(self.choose_dir + '\\' + self.widget.choose_file_name_le.text())
@@ -330,10 +338,10 @@ class LogWindow(QtWidgets.QWidget):
 
     def load_pv_list(self, file_name=None):
         if not file_name or not os.path.isfile(file_name):
-            load_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file name for loading pv list', 'C:/Repos/LogFile/logs',
+            load_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file name for loading pv list', self.logs_dir,
                                                                  'Text Files (*.txt)')
         else:
-            load_name = 'C:/Repos/LogFile/logs/' + file_name
+            load_name = self.logs_dir + '/' + file_name
 
         if not load_name:
             msg = 'No File Opened'
@@ -362,10 +370,10 @@ class LogWindow(QtWidgets.QWidget):
 
     def save_pv_list(self, file_name=None):
         if not file_name:
-            save_name, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Choose file name for saving pv list', 'C:/Repos/LogFile/logs',
+            save_name, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Choose file name for saving pv list', self.logs_dir,
                                                                  'Text Files (*.txt)')
         else:
-            save_name = 'C:/Repos/LogFile/logs/' + file_name
+            save_name = self.logs_dir + '/' + file_name
 
         if not save_name:
             msg = 'No File Saved'
@@ -608,7 +616,7 @@ class LogWindow(QtWidgets.QWidget):
     def load_config(self):
         cfg = {}
         try:
-            cfg_file = open("C:/Repos/LogFile/log_config.txt", 'r')
+            cfg_file = open(os.path.join(os.path.dirname(self.logs_dir), 'log_config.txt'), 'r')
         except IOError:
             print('No configuration file, using program defaults')
             return
@@ -628,7 +636,7 @@ class LogWindow(QtWidgets.QWidget):
                 detector.setChecked(True)
 
     def save_config(self):
-        cfg_file = open("C:/Repos/LogFile/log_config.txt", 'w')
+        cfg_file = open(os.path.join(os.path.dirname(self.logs_dir), 'log_config.txt'), 'w')
 
         outline = 'directory\t' + self.choose_dir + '\n'
         cfg_file.write(outline)
