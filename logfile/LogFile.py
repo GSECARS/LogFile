@@ -21,7 +21,6 @@ except ImportError:
     caput = None
     caget = None
 from . import epics_monitor
-from . import icons_rc  # noqa: F401
 from .FolderMaker import FolderMaker
 from .widgets.LogWidgets import LogFileWidget
 from .detectors import detectors
@@ -700,6 +699,18 @@ def _set_macos_dock_icon(icon_path: str) -> None:
         NSApplication.sharedApplication().setApplicationIconImage_(ns_image)
 
 
+def _win_local_icon() -> str:
+    src = str(Path(__file__).parent / "icons" / "google_notebook.ico")
+    dest_dir = os.path.join(os.environ.get("PROGRAMDATA", r"C:\ProgramData"), "LogFile")
+    try:
+        os.makedirs(dest_dir, exist_ok=True)
+        dest = os.path.join(dest_dir, "google_notebook.ico")
+        shutil.copy2(src, dest)
+        return dest
+    except OSError:
+        return src
+
+
 def make_icon(public: bool = False) -> None:
     from pyshortcuts import make_shortcut
     bindir = "Scripts" if os.name == "nt" else "bin"
@@ -735,10 +746,17 @@ def main() -> None:
             except ImportError:
                 pass
 
+        if platform == "win32":
+            import ctypes
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('GSECARS.LogFile')
+
         app = QtWidgets.QApplication(sys.argv)
         app.setApplicationName("LogFile")
         app.setApplicationDisplayName("LogFile")
-        app.setWindowIcon(QtGui.QIcon(':/icons/google_notebook.png'))
+        if platform == "win32":
+            app.setWindowIcon(QtGui.QIcon(_win_local_icon()))
+        else:
+            app.setWindowIcon(QtGui.QIcon(str(Path(__file__).parent / "icons" / "google_notebook.png")))
         if platform == "darwin":
             _set_macos_dock_icon(str(Path(__file__).parent / "icons" / "google_notebook.png"))
         main_window = MainWindow()
