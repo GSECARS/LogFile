@@ -35,6 +35,7 @@ class LogFileWidget(QtWidgets.QWidget):
         self.pv_move_dn_btn = QtWidgets.QPushButton(u'\u2193')
         self.pv_toggle_after_btn = QtWidgets.QPushButton('Before/After')
         self.clear_detectors_stack_btn = QtWidgets.QPushButton('Clear detectors')
+        self.select_config_btn = QtWidgets.QPushButton('Select Config')
 
         self.log_entries_list = QtWidgets.QListWidget(self)
         self.log_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
@@ -98,6 +99,7 @@ class LogFileWidget(QtWidgets.QWidget):
         hbox_control.addStretch(1)
         hbox_control.addWidget(self.end_time_lbl)
         hbox_control.addStretch(1)
+        hbox_control.addWidget(self.select_config_btn)
         hbox_control.addWidget(self.choose_detector_tb)
         hbox_control.addWidget(self.comment_btn)
         hbox_control.addWidget(self.create_folders_btn)
