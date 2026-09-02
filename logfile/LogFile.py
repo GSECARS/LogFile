@@ -737,10 +737,10 @@ def main() -> None:
         app = QtWidgets.QApplication(sys.argv)
         app.setApplicationName("LogFile")
         app.setApplicationDisplayName("LogFile")
-        icon_path = str(Path(__file__).parent / "icons" / "google_notebook.png")
+        icon_path = str(Path(__file__).parent / "icons" / "google_notebook.ico")
         app.setWindowIcon(QtGui.QIcon(icon_path))
         if platform == "darwin":
-            _set_macos_dock_icon(icon_path)
+            _set_macos_dock_icon(str(Path(__file__).parent / "icons" / "google_notebook.png"))
         main_window = MainWindow()
         sys.exit(app.exec_())
 
