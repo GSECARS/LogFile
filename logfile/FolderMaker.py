@@ -222,13 +222,13 @@ class FolderMaker(QtWidgets.QWidget):
     def load_folder_maker_settings(self):
         year = self.folder_maker_settings.value('year', defaultValue=None)
         if year is None:
-            self.advanced_settings_gb.year_edit.setText(self.all_time.tm_year)
+            self.advanced_settings_gb.year_edit.setText(str(self.all_time.tm_year))
         else:
             self.advanced_settings_gb.year_edit.setText(year)
 
         cycle = self.folder_maker_settings.value('cycle', defaultValue=None)
         if cycle is None:
-            self.advanced_settings_gb.cycle_edit.setText(self.get_cycle())
+            self.advanced_settings_gb.cycle_edit.setText(str(self.get_cycle()))
         else:
             self.advanced_settings_gb.cycle_edit.setText(cycle)
 
