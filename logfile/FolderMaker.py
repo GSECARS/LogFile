@@ -261,13 +261,11 @@ class AdvancedSettingsSection(QtWidgets.QGroupBox):
         self.cycle_edit = QtWidgets.QLineEdit()
         self.root_format_label = QtWidgets.QLabel('Root Format')
         self.root_format_edit = QtWidgets.QLineEdit()
-        self.root_format_browse_btn = QtWidgets.QPushButton('Browse')
 
     def setup_connections(self):
         self.year_edit.editingFinished.connect(self.emit_advanced_settings_changed)
         self.cycle_edit.editingFinished.connect(self.emit_advanced_settings_changed)
         self.root_format_edit.editingFinished.connect(self.emit_advanced_settings_changed)
-        self.root_format_browse_btn.clicked.connect(self.browse_root_format)
 
     def set_layout(self):
         self.grid_layout_section = QtWidgets.QGridLayout()
@@ -276,17 +274,9 @@ class AdvancedSettingsSection(QtWidgets.QGroupBox):
         self.grid_layout_section.addWidget(self.cycle_label, 0, 2, 1, 1)
         self.grid_layout_section.addWidget(self.cycle_edit, 0, 3, 1, 1)
         self.grid_layout_section.addWidget(self.root_format_label, 1, 0, 1, 1)
-        self.grid_layout_section.addWidget(self.root_format_edit, 1, 1, 1, 2)
-        self.grid_layout_section.addWidget(self.root_format_browse_btn, 1, 3, 1, 1)
+        self.grid_layout_section.addWidget(self.root_format_edit, 1, 1, 1, 3)
         self.grid_layout_section.setVerticalSpacing(12)
         self.setLayout(self.grid_layout_section)
-
-    def browse_root_format(self):
-        current = self.root_format_edit.text()
-        directory = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Root Logs Folder', current)
-        if directory:
-            self.root_format_edit.setText(directory)
-            self.emit_advanced_settings_changed()
 
     def emit_advanced_settings_changed(self):
         self.advancedSettingsChanged.emit()

@@ -93,7 +93,6 @@ class LogWindow(QtWidgets.QWidget):
         # self.widget.comment_btn.clicked.connect(self.add_comment)
         self.widget.start_btn.clicked.connect(self.start_logging)
         self.widget.stop_btn.clicked.connect(self.stop_logging)
-        self.widget.select_config_btn.clicked.connect(self.select_config)
         self.widget.pv_load_btn.clicked.connect(self.load_pv_list)
         self.widget.pv_save_btn.clicked.connect(self.save_pv_list)
         self.widget.pv_remove_btn.clicked.connect(self.remove_from_pv_list)
@@ -134,13 +133,13 @@ class LogWindow(QtWidgets.QWidget):
         self.widget.end_time_lbl.setVisible(False)
         self.widget.full_path_lbl.setVisible(False)
         self.widget.choose_file_name_le.setVisible(False)
+        self.widget.choose_dir_btn.setVisible(False)
         self.widget.create_folders_btn.setVisible(False)
 
     def choose_dir_btn_clicked(self):
         msg = 'Choose directory for saving log file'
         self.choose_dir = QtWidgets.QFileDialog.getExistingDirectory(self, msg, self.choose_dir)
         if self.choose_dir:
-            self.log_file_settings.setValue('log_file_dir', self.choose_dir)
             self.set_choose_dir_label()
 
     def set_choose_dir_label(self):
@@ -156,11 +155,7 @@ class LogWindow(QtWidgets.QWidget):
     def load_previous_log(self, file_name=None):
         if not file_name:
             msg = 'Choose log file to view'
-            if self.offline_log_file and os.path.isfile(self.offline_log_file):
-                start_dir = self.offline_log_file
-            else:
-                start_dir = self.choose_dir
-            load_log_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, msg, directory=start_dir,
+            load_log_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, msg, directory=self.offline_log_file,
                                                                      filter='Text Files (*.txt)')
         else:
             load_log_name = file_name
@@ -333,22 +328,12 @@ class LogWindow(QtWidgets.QWidget):
             if detector.isChecked():
                 self.detectors.append(detector.text())
 
-    def select_config(self):
-        load_name, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Select config file', '', 'Text Files (*.txt)')
-        if not load_name:
-            return
-        self.clear_pv_list()
-        self.load_pv_list(load_name)
-        self.widget.select_config_btn.setText(f'Config: {os.path.basename(load_name)}')
-        self.log_file_settings.setValue('config_file', load_name)
-
     def load_pv_list(self, file_name=None):
         if not file_name or not os.path.isfile(file_name):
-            load_name, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Choose file name for loading pv list', '', 'Text Files (*.txt)')
+            load_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose file name for loading pv list', 'C:/Repos/LogFile/logs',
+                                                                 'Text Files (*.txt)')
         else:
-            load_name = file_name
+            load_name = 'C:/Repos/LogFile/logs/' + file_name
 
         if not load_name:
             msg = 'No File Opened'
@@ -377,10 +362,10 @@ class LogWindow(QtWidgets.QWidget):
 
     def save_pv_list(self, file_name=None):
         if not file_name:
-            save_name, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, 'Choose file name for saving pv list', '', 'Text Files (*.txt)')
+            save_name, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Choose file name for saving pv list', 'C:/Repos/LogFile/logs',
+                                                                 'Text Files (*.txt)')
         else:
-            save_name = file_name
+            save_name = 'C:/Repos/LogFile/logs/' + file_name
 
         if not save_name:
             msg = 'No File Saved'
@@ -592,18 +577,14 @@ class LogWindow(QtWidgets.QWidget):
 
     def load_log_file_settings(self, offline=False):
         self.offline_log_file = self.log_file_settings.value('offline_log_file', defaultValue=None)
-        self.choose_dir = self.log_file_settings.value('log_file_dir', defaultValue=self.choose_dir)
 
         if offline:
             return
 
+        self.choose_dir = self.log_file_settings.value('log_file_dir', defaultValue=self.choose_dir)
         self.choose_file = self.log_file_settings.value('log_file_name', defaultValue=self.choose_file)
         self.pvs_file = self.log_file_settings.value('pv_list_file', defaultValue='')
         self.detectors = self.log_file_settings.value('detectors', defaultValue=[])
-        config_file = self.log_file_settings.value('config_file', defaultValue='')
-        if config_file and os.path.isfile(config_file):
-            self.load_pv_list(config_file)
-            self.widget.select_config_btn.setText(f'Config: {os.path.basename(config_file)}')
 
         self.widget.choose_file_name_le.setText(self.choose_file)
         self.set_choose_dir_label()
