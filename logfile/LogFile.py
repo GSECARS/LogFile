@@ -48,7 +48,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.statusBar()
         # self.setMinimumWidth(800)
         self.setWindowTitle('Log File Creator and Monitor')
-        self.setWindowIcon(QtGui.QIcon(os.path.join(_ICONS_DIR, 'google_notebook.png')))
+        self.setWindowIcon(QtGui.QIcon(os.path.join(_ICONS_DIR, 'google_notebook.ico')))
         self.show()
 
         # Create Log Window
