@@ -129,7 +129,7 @@ detectors['Eiger2 9M 3S'] = {
     'sleep_after_end': 0.0,
     'default_base_name': 'LaB6',
     'default_rel_dir': '',
-    'soft_link': '/home/dac_user/cars6/Data/dac_user/2026/IDD_2026-1/',
+    'soft_link': '/home/dac_user/cars6/Data/dac_user/2026/IDD_2026-2/',
     'file_path': '13EIG2_9M:HDF1:FilePath',
     'file_name': '13EIG2_9M:HDF1:FileName',
     'file_number': '13EIG2_9M:HDF1:FileNumber',

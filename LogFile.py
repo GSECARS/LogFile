@@ -673,10 +673,10 @@ sys.excepthook = excepthook
 
 
 def main():
-    pass
-
-if __name__ == '__main__':
-    main()
     app = QtWidgets.QApplication(sys.argv)
     main_window = MainWindow()
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
+    
