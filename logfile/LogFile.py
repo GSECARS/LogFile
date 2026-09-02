@@ -3,7 +3,16 @@ Created Mar 31 2016
 Author: Eran Greenberg
 """
 
-import sys, time, os
+import argparse
+import os
+import shutil
+import sys
+import time
+from pathlib import Path
+from sys import platform
+
+os.environ["QT_MAC_WANTS_LAYER"] = "1"
+
 from qtpy import QtGui, QtCore, QtWidgets
 try:
     from epics import caput
@@ -674,10 +683,59 @@ def excepthook(exc_type, exc_value, traceback_obj):
 sys.excepthook = excepthook
 
 
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    main_window = MainWindow()
-    sys.exit(app.exec_())
+def _set_macos_dock_icon(icon_path: str) -> None:
+    from contextlib import suppress
+    with suppress(Exception):
+        from AppKit import NSApplication, NSImage
+        ns_image = NSImage.alloc().initWithContentsOfFile_(icon_path)
+        NSApplication.sharedApplication().setApplicationIconImage_(ns_image)
+
+
+def make_icon(public: bool = False) -> None:
+    from pyshortcuts import make_shortcut
+    bindir = "Scripts" if os.name == "nt" else "bin"
+    script = os.path.join(sys.prefix, bindir, "logfile")
+    icon_path = str(Path(__file__).parent / "icons" / "google_notebook.ico")
+    if os.name == "nt":
+        local_icon = os.path.join(
+            os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "google_notebook.ico"
+        )
+        shutil.copy2(icon_path, local_icon)
+        icon_path = local_icon
+    make_shortcut(script, name="LogFile", icon=icon_path, terminal=True,
+                  public=public, folder="GSEApps" if public else None)
+    print("Desktop shortcut created.")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser("LogFile CLI")
+    parser.add_argument("-m", "--make-icon", action="store_true", help="create desktop shortcut icon")
+    parser.add_argument("-p", "--public", action="store_true", help="create shortcut on public desktop")
+    args = parser.parse_args()
+
+    if args.make_icon or args.public:
+        make_icon(public=args.public)
+    else:
+        if platform == "darwin":
+            try:
+                from Foundation import NSBundle
+                info = NSBundle.mainBundle().infoDictionary()
+                if info is not None:
+                    info["CFBundleName"] = "LogFile"
+                    info["CFBundleDisplayName"] = "LogFile"
+            except ImportError:
+                pass
+
+        app = QtWidgets.QApplication(sys.argv)
+        app.setApplicationName("LogFile")
+        app.setApplicationDisplayName("LogFile")
+        icon_path = str(Path(__file__).parent / "icons" / "google_notebook.png")
+        app.setWindowIcon(QtGui.QIcon(icon_path))
+        if platform == "darwin":
+            _set_macos_dock_icon(icon_path)
+        main_window = MainWindow()
+        sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()
