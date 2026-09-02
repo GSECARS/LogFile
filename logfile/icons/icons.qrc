@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/icons">
+        <file>google_notebook.png</file>
+        <file>google_notebook.ico</file>
+    </qresource>
+</RCC>

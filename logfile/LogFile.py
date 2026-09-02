@@ -21,6 +21,7 @@ except ImportError:
     caput = None
     caget = None
 from . import epics_monitor
+from . import icons_rc  # noqa: F401
 from .FolderMaker import FolderMaker
 from .widgets.LogWidgets import LogFileWidget
 from .detectors import detectors
@@ -48,7 +49,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.statusBar()
         # self.setMinimumWidth(800)
         self.setWindowTitle('Log File Creator and Monitor')
-        self.setWindowIcon(QtGui.QIcon(os.path.join(_ICONS_DIR, 'google_notebook.ico')))
+        self.setWindowIcon(QtGui.QIcon(':/icons/google_notebook.png'))
         self.show()
 
         # Create Log Window
@@ -737,8 +738,7 @@ def main() -> None:
         app = QtWidgets.QApplication(sys.argv)
         app.setApplicationName("LogFile")
         app.setApplicationDisplayName("LogFile")
-        icon_path = str(Path(__file__).parent / "icons" / "google_notebook.ico")
-        app.setWindowIcon(QtGui.QIcon(icon_path))
+        app.setWindowIcon(QtGui.QIcon(':/icons/google_notebook.png'))
         if platform == "darwin":
             _set_macos_dock_icon(str(Path(__file__).parent / "icons" / "google_notebook.png"))
         main_window = MainWindow()
